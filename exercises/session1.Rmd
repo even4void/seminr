@@ -1,0 +1,142 @@
+---
+title: "Analyse des données d'Holzinger et Swineford"
+author: "Christophe Lalanne"
+date: "6 janvier 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Gestion de la base de données
+Pour charger les données, on utilise la commande `data()`. Il est nécessaire de charger le package `lavaan` au préalable.
+```{r load}
+library(lavaan)
+data("HolzingerSwineford1939")
+```
+
+Pour faciliter les notations, on renomme le tableau de données (data frame) `HS` :
+```{r rename}
+HS <- HolzingerSwineford1939
+```
+
+La commande `head()` permet d'afficher les 6 premières observations (par défaut) du tableau de données :
+```{r preview}
+head(HS)
+```
+
+Pour faciliter la manipulation des variables, on renomme les variables nommées `x1` (colonne n°7) à `x9` (colonne n°15) avec des noms plus explicites :
+
+```{r rename2}
+names(HS)[7:15] <- c("visual", "cubes", "paper", 
+                     "paragrap", "sentence", "wordm", 
+                     "addition", "counting", "straight")
+```
+
+Enfin, on indique à R que les variables `id`, `grade` et `sex` doivent être traitées comme des variables catégorielles (appelées "facteurs" sous R). Dans le cas du sexe des participants, on associe un jeu d'étiquettes ("labels") aux codes numériques 1 ("M") et 2 ("F") :
+```{r recode}
+HS$id <- factor(HS$id)
+HS$grade <- factor(HS$grade)
+HS$sex <- factor(HS$sex, levels = c(1,2), labels = c("M","F"))
+```
+
+La commande suivante permet de vérifier que les opérations réalisées précédemment ont bien abouti au résultat escompté : dans le cas des variables numériques R affiche un résumé en 5 points (+ la moyenne) et dans le cas des variables catgorielles un tableau d'effectifs.
+```
+summary(HS)
+```
+
+## Exploration des données
+
+La commande permettant de fournir de "résumer" une variable réponse numérique selon les niveaux d'un facteur sous R est `aggregate(y ~ x, data = , function)`. La formule indique la variable réponse (à gauche) à résumer selon les niveaux (ou les valeurs uniques) de la variable explicative (à droite) à l'aide d'une fonction particulière. Il est donc possible de calculer les moyennes conditionnelles pour la variable `visual` selon le sexe ou l'âge de la manière suivante :
+```{r aggregate}
+aggregate(visual ~ sex, data = HS, mean)
+aggregate(visual ~ ageyr, data = HS, mean)
+```
+
+Il est possible de spécifier plusieurs variables explicatives et dans ce cas R les opérations sont effectuées sur le croisement des modalités de chacune des variables :
+```{r aggregate2}
+aggregate(visual ~ sex + ageyr, data = HS, mean)
+```
+
+Enfin, la commande `subset()` permet d'effectuer des opérations de sélection de lignes ou de colonnes. Elle peut s'utiliser directement avec aggregate lorsque l'on renseigne l'option `data=` comme illustré dans l'exemple suivant :
+```{r aggregate3}
+aggregate(visual ~ ageyr, data = subset(HS, sex == "M"), mean)
+```
+
+## Tests statistiques usuels
+
+### Test de Student
+
+Le test de Student proposé par défaut ne suppose pas l'égalité des variances parentes (test de Welch). Si l'on souhaite réaliser le test classique de Student, il est nécessaire d'ajouter l'option `var.equal = TRUE`. Voici un exemple d'application permettant de tester l'égalité des scores visuels moyens entre les garçons et les filles :
+```{r ttest}
+t.test(visual ~ sex, data = HS)
+```
+
+## Test du chi-deux
+
+La commande `xtabs()` permet de construire un tableau de contingence (effectifs pour chaque croisement des niveaux de deux variables catégorielles). Puisque les deux variables jouent un rôle symétrique, elles apparaissent toutes les deux à droite dans la formule (il n'y a pas de variable réponse) :
+```{r xtabs}
+xtabs(~ sex + grade, data = HS)
+```
+
+En couplant cette commande à `summary()` R affiche le résultat du test du chi-deux de Pearson :
+```{r chisq}
+summary(xtabs(~ sex + grade, data = HS))
+```
+
+Mais il est tout à fait possible d'utiliser directement la commande `chisq.test()` pour obtenir la statistique de test et son degré de signification. Cette commande présente l'avantage de renvoyer également les effectifs théoriques (effectifs attendus sous l'hypothèse d'indépendance entre les deux variables) ainsi que les résidus.
+```{r chisq2}
+chisq.test(xtabs(~ sex + grade, data = HS))
+```
+
+À partir de là, les effectifs théoriques s'obtiennent en suffixant la commande par `$expected`.
+```
+chisq.test(xtabs(~ sex + grade, data = HS))$expected
+```
+
+Enfin, pour calculer les fréquences relatives par ligne (`margin = 1`) ou par colonne (`margin = 2`), on utilisera la commande `prop.table()` comme illustré dans les exemples suivants :
+```{r ptable}
+prop.table(xtabs(~ sex + grade, data = HS), 1)
+prop.table(xtabs(~ sex + grade, data = HS), 2)
+```
+
+
+## ANOVA
+
+La commande `cut()` permet de catégoriser une variable numérique en un certain nombre de classes dont il suffit de définir les bornes d'intervalle à l'aide de l'argument `breaks=`. Attention, par défaut la borne inférieure du premier intervalle n'est pas incluse et il sera nécessaire de rajouter également l'option `include.lowest = TRUE`. R transformera automatiquement la variable en variable catégorielle et il est donc possible d'associer des étiquettes textuelles aux intervalles définis *via* `breaks=`. 
+```{r cut}
+HS$agec <- cut(HS$ageyr, breaks = c(11,12,13,16), 
+               include.lowest = TRUE, 
+               labels = c("11-12", "13", "14-16"))
+```
+
+Puisque `agec` est traité comme une variable catégorielle (type `factor`), on peut utiliser directement `summary()` pour afficher la distribution des effectifs selon les 3 classes définies plus haut :
+```{r summary}
+summary(HS$agec)
+```
+
+On utilisera `aggregate()` pour obtenir les moyennes et les écarts-type de chaque groupe.
+```
+aggregate(visual ~ agec, data = HS, mean)
+aggregate(visual ~ agec, data = HS, sd)
+```
+
+Le tableau d'analyse de variance s'obtient en couplant les commandes `aov()` et `summary()`. Comme dans le cas des autres tests statistiques, on utilise une formule décrivant les variables à mettre en relation :
+```{r anova}
+summary(aov(visual ~ agec, data = HS))
+```
+
+## Test de corrélation
+
+Le test de nullité d'un coefficient de corrélation s'obtient avec la commande `cor.test()`. Comme dans le cas de `xtabs()`, les deux variables apparaissent à droite de la formule puisque dans le cas de l'analyse de corrélation les deux variables sont supposées jouer un rôle symétrique.
+```{r cortest}
+cor.test(~ visual + ageyr, data = HS)
+```
+
+
+
+
+
+
+

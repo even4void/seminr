@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Gestion de la base de données</title>
+    <meta charset="utf-8">
+    <meta name="generator" content="knitr" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/github.min.css">
+
+<style type="text/css">
+/* Derived from the Docco package by Jeremy Ashkenas: https://github.com/jashkenas/docco/ */
+body {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+    height:100%;
+    font-size: 16px;
+    line-height: 24px;
+    color: #30404f;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #112233;
+    line-height: 1em;
+    font-weight: normal;
+    margin: 0 0 15px 0;
+}
+
+p {
+    margin: 0 0 15px 0;
+    font-size:17px;
+}
+
+#footer p{
+    margin:0;
+    font-size:12px;
+    text-align: center;
+}
+
+a{
+    color:#0088cc;
+    text-decoration:none;
+}
+
+a:hover,a:focus{
+    color:#005580;
+    text-decoration:underline;
+}
+
+#container {
+    position: relative;
+    margin: 0;
+    height:100%;
+}
+
+body > #container { height: auto; min-height: 100%; }
+
+table{
+    width:100%;
+    border: 0;
+    outline: 0;
+}
+
+td.docs{
+    width: 50%;
+    text-align: left;
+    vertical-align: top;
+    padding: 10px 25px 1px 50px;
+}
+
+
+td.code{
+    background: #f5f5ff;
+    padding: 10px 25px 1px 50px;
+    overflow-x: hidden;
+    vertical-align: top;
+}
+
+code{
+    font-size:12px;
+    margin: 0;
+    padding: 0;
+}
+
+td.docs code{
+    background: #f8f8ff;
+    border: 1px solid #dedede;
+    font-size: 80%;
+    padding: 0 0.2em;
+}
+
+td.docs img{
+  max-width: 100%;
+}
+
+pre code{
+    padding:2px 4px;
+    background:#f5f5ff;
+}
+
+td.code pre code{
+    line-height: 18px;
+}
+
+.pilwrap {
+    position: relative;
+}
+.pilcrow {
+    font: 12px Arial;
+    text-decoration: none;
+    color: rgb(69, 69, 69);
+    position: absolute;
+    top: 3px;
+    left: -20px;
+    padding: 1px 2px;
+    opacity: 0;
+}
+
+td.docs:hover .pilcrow {
+    opacity: 1;
+}
+
+blockquote {
+    border-left: 4px solid #DDD;
+    padding: 0 15px;
+    color: #777;
+}
+div.handler{
+      width: 5px;
+      padding: 0;
+      cursor: col-resize;
+      position: absolute;
+      z-index: 5;
+}
+</style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/highlight.min.js"></script>
+<script type="text/javascript">
+hljs.LANGUAGES.r=function(a){var b="([a-zA-Z]|\\.[a-zA-Z.])[a-zA-Z0-9._]*";return{c:[a.HCM,{b:b,l:b,k:{keyword:"function if in break next repeat else for return switch while try tryCatch|10 stop warning require library attach detach source setMethod setGeneric setGroupGeneric setClass ...|10",literal:"NULL NA TRUE FALSE T F Inf NaN NA_integer_|10 NA_real_|10 NA_character_|10 NA_complex_|10"},r:0},{cN:"number",b:"0[xX][0-9a-fA-F]+[Li]?\\b",r:0},{cN:"number",b:"\\d+(?:[eE][+\\-]?\\d*)?L\\b",r:0},{cN:"number",b:"\\d+\\.(?!\\d)(?:i\\b)?",r:0},{cN:"number",b:"\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",r:0},{b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[a.BE],r:0},{cN:"string",b:"'",e:"'",c:[a.BE],r:0}]}}(hljs);
+</script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="http://yihui.name/media/js/center-images.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <table><!--table start-->
+<tr id="row1"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row1">&para;</a></div><h2>Gestion de la base de données</h2>
+
+</td><td class="code"></td></tr><tr id="row2"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row2">&para;</a></div><p>Pour charger les données, on utilise la commande <code>data()</code>. Il est nécessaire de charger le package <code>lavaan</code> au préalable.</p></td><td class="code"><pre><code class="r">library(lavaan)
+data(&quot;HolzingerSwineford1939&quot;)
+</code></pre></td></tr><tr id="row3"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row3">&para;</a></div>
+
+<p>Pour faciliter les notations, on renomme le tableau de données (data frame) <code>HS</code> :</p></td><td class="code"><pre><code class="r">HS &lt;- HolzingerSwineford1939
+</code></pre></td></tr><tr id="row4"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row4">&para;</a></div>
+
+<p>La commande <code>head()</code> permet d&#39;afficher les 6 premières observations (par défaut) du tableau de données :</p></td><td class="code"><pre><code class="r">head(HS)
+</code></pre>
+<pre><code>##   id sex ageyr agemo  school grade       x1   x2    x3       x4   x5
+## 1  1   1    13     1 Pasteur     7 3.333333 7.75 0.375 2.333333 5.75
+## 2  2   2    13     7 Pasteur     7 5.333333 5.25 2.125 1.666667 3.00
+## 3  3   2    13     1 Pasteur     7 4.500000 5.25 1.875 1.000000 1.75
+## 4  4   1    13     2 Pasteur     7 5.333333 7.75 3.000 2.666667 4.50
+## 5  5   2    12     2 Pasteur     7 4.833333 4.75 0.875 2.666667 4.00
+## 6  6   2    14     1 Pasteur     7 5.333333 5.00 2.250 1.000000 3.00
+##          x6       x7   x8       x9
+## 1 1.2857143 3.391304 5.75 6.361111
+## 2 1.2857143 3.782609 6.25 7.916667
+## 3 0.4285714 3.260870 3.90 4.416667
+## 4 2.4285714 3.000000 5.30 4.861111
+## 5 2.5714286 3.695652 6.30 5.916667
+## 6 0.8571429 4.347826 6.65 7.500000
+</code></pre></td></tr><tr id="row5"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row5">&para;</a></div>
+
+<p>Pour faciliter la manipulation des variables, on renomme les variables nommées <code>x1</code> (colonne n°7) à <code>x9</code> (colonne n°15) avec des noms plus explicites :</p></td><td class="code"><pre><code class="r">names(HS)[7:15] &lt;- c(&quot;visual&quot;, &quot;cubes&quot;, &quot;paper&quot;, 
+                     &quot;paragrap&quot;, &quot;sentence&quot;, &quot;wordm&quot;, 
+                     &quot;addition&quot;, &quot;counting&quot;, &quot;straight&quot;)
+</code></pre></td></tr><tr id="row6"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row6">&para;</a></div>
+
+<p>Enfin, on indique à R que les variables <code>id</code>, <code>grade</code> et <code>sex</code> doivent être traitées comme des variables catégorielles (appelées &ldquo;facteurs&rdquo; sous R). Dans le cas du sexe des participants, on associe un jeu d&#39;étiquettes (&ldquo;labels&rdquo;) aux codes numériques 1 (&ldquo;M&rdquo;) et 2 (&ldquo;F&rdquo;) :</p></td><td class="code"><pre><code class="r">HS$id &lt;- factor(HS$id)
+HS$grade &lt;- factor(HS$grade)
+HS$sex &lt;- factor(HS$sex, levels = c(1,2), labels = c(&quot;M&quot;,&quot;F&quot;))
+</code></pre></td></tr><tr id="row7"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row7">&para;</a></div>
+
+<p>La commande suivante permet de vérifier que les opérations réalisées précédemment ont bien abouti au résultat escompté : dans le cas des variables numériques R affiche un résumé en 5 points (+ la moyenne) et dans le cas des variables catgorielles un tableau d&#39;effectifs.</p></td><td class="code"><pre><code>summary(HS)
+</code></pre></td></tr><tr id="row8"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row8">&para;</a></div>
+
+<h2>Exploration des données</h2>
+
+</td><td class="code"></td></tr><tr id="row9"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row9">&para;</a></div><p>La commande permettant de fournir de &ldquo;résumer&rdquo; une variable réponse numérique selon les niveaux d&#39;un facteur sous R est <code>aggregate(y ~ x, data = , function)</code>. La formule indique la variable réponse (à gauche) à résumer selon les niveaux (ou les valeurs uniques) de la variable explicative (à droite) à l&#39;aide d&#39;une fonction particulière. Il est donc possible de calculer les moyennes conditionnelles pour la variable <code>visual</code> selon le sexe ou l&#39;âge de la manière suivante :</p></td><td class="code"><pre><code class="r">aggregate(visual ~ sex, data = HS, mean)
+</code></pre>
+<pre><code>##   sex   visual
+## 1   M 5.033105
+## 2   F 4.844086
+</code></pre>
+<pre><code class="r">aggregate(visual ~ ageyr, data = HS, mean)
+</code></pre>
+<pre><code>##   ageyr   visual
+## 1    11 5.187500
+## 2    12 4.996700
+## 3    13 4.921212
+## 4    14 4.848485
+## 5    15 5.025000
+## 6    16 4.428571
+</code></pre></td></tr><tr id="row10"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row10">&para;</a></div>
+
+<p>Il est possible de spécifier plusieurs variables explicatives et dans ce cas R les opérations sont effectuées sur le croisement des modalités de chacune des variables :</p></td><td class="code"><pre><code class="r">aggregate(visual ~ sex + ageyr, data = HS, mean)
+</code></pre>
+<pre><code>##    sex ageyr   visual
+## 1    M    11 5.125000
+## 2    F    11 5.250000
+## 3    M    12 4.940171
+## 4    F    12 5.032258
+## 5    M    13 5.035714
+## 6    F    13 4.802469
+## 7    M    14 5.183908
+## 8    F    14 4.474359
+## 9    M    15 5.303030
+## 10   F    15 4.685185
+## 11   M    16 4.428571
+</code></pre></td></tr><tr id="row11"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row11">&para;</a></div>
+
+<p>Enfin, la commande <code>subset()</code> permet d&#39;effectuer des opérations de sélection de lignes ou de colonnes. Elle peut s&#39;utiliser directement avec aggregate lorsque l&#39;on renseigne l&#39;option <code>data=</code> comme illustré dans l&#39;exemple suivant :</p></td><td class="code"><pre><code class="r">aggregate(visual ~ ageyr, data = subset(HS, sex == &quot;M&quot;), mean)
+</code></pre>
+<pre><code>##   ageyr   visual
+## 1    11 5.125000
+## 2    12 4.940171
+## 3    13 5.035714
+## 4    14 5.183908
+## 5    15 5.303030
+## 6    16 4.428571
+</code></pre></td></tr><tr id="row12"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row12">&para;</a></div>
+
+<h2>Tests statistiques usuels</h2>
+
+<h3>Test de Student</h3>
+
+</td><td class="code"></td></tr><tr id="row13"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row13">&para;</a></div><p>Le test de Student proposé par défaut ne suppose pas l&#39;égalité des variances parentes (test de Welch). Si l&#39;on souhaite réaliser le test classique de Student, il est nécessaire d&#39;ajouter l&#39;option <code>var.equal = TRUE</code>. Voici un exemple d&#39;application permettant de tester l&#39;égalité des scores visuels moyens entre les garçons et les filles :</p></td><td class="code"><pre><code class="r">t.test(visual ~ sex, data = HS)
+</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  visual by sex
+## t = 1.4095, df = 298.9, p-value = 0.1597
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.07489415  0.45293216
+## sample estimates:
+## mean in group M mean in group F 
+##        5.033105        4.844086
+</code></pre></td></tr><tr id="row14"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row14">&para;</a></div>
+
+<h2>Test du chi-deux</h2>
+
+</td><td class="code"></td></tr><tr id="row15"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row15">&para;</a></div><p>La commande <code>xtabs()</code> permet de construire un tableau de contingence (effectifs pour chaque croisement des niveaux de deux variables catégorielles). Puisque les deux variables jouent un rôle symétrique, elles apparaissent toutes les deux à droite dans la formule (il n&#39;y a pas de variable réponse) :</p></td><td class="code"><pre><code class="r">xtabs(~ sex + grade, data = HS)
+</code></pre>
+<pre><code>##    grade
+## sex  7  8
+##   M 74 71
+##   F 83 72
+</code></pre></td></tr><tr id="row16"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row16">&para;</a></div>
+
+<p>En couplant cette commande à <code>summary()</code> R affiche le résultat du test du chi-deux de Pearson :</p></td><td class="code"><pre><code class="r">summary(xtabs(~ sex + grade, data = HS))
+</code></pre>
+<pre><code>## Call: xtabs(formula = ~sex + grade, data = HS)
+## Number of cases in table: 300 
+## Number of factors: 2 
+## Test for independence of all factors:
+##  Chisq = 0.18979, df = 1, p-value = 0.6631
+</code></pre></td></tr><tr id="row17"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row17">&para;</a></div>
+
+<p>Mais il est tout à fait possible d&#39;utiliser directement la commande <code>chisq.test()</code> pour obtenir la statistique de test et son degré de signification. Cette commande présente l&#39;avantage de renvoyer également les effectifs théoriques (effectifs attendus sous l&#39;hypothèse d&#39;indépendance entre les deux variables) ainsi que les résidus.</p></td><td class="code"><pre><code class="r">chisq.test(xtabs(~ sex + grade, data = HS))
+</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with Yates&#39; continuity correction
+## 
+## data:  xtabs(~sex + grade, data = HS)
+## X-squared = 0.1024, df = 1, p-value = 0.749
+</code></pre></td></tr><tr id="row18"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row18">&para;</a></div>
+
+<p>À partir de là, les effectifs théoriques s&#39;obtiennent en suffixant la commande par <code>$expected</code>.</p></td><td class="code"><pre><code>chisq.test(xtabs(~ sex + grade, data = HS))$expected
+</code></pre></td></tr><tr id="row19"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row19">&para;</a></div>
+
+<p>Enfin, pour calculer les fréquences relatives par ligne (<code>margin = 1</code>) ou par colonne (<code>margin = 2</code>), on utilisera la commande <code>prop.table()</code> comme illustré dans les exemples suivants :</p></td><td class="code"><pre><code class="r">prop.table(xtabs(~ sex + grade, data = HS), 1)
+</code></pre>
+<pre><code>##    grade
+## sex         7         8
+##   M 0.5103448 0.4896552
+##   F 0.5354839 0.4645161
+</code></pre>
+<pre><code class="r">prop.table(xtabs(~ sex + grade, data = HS), 2)
+</code></pre>
+<pre><code>##    grade
+## sex         7         8
+##   M 0.4713376 0.4965035
+##   F 0.5286624 0.5034965
+</code></pre></td></tr><tr id="row20"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row20">&para;</a></div>
+
+<h2>ANOVA</h2>
+
+</td><td class="code"></td></tr><tr id="row21"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row21">&para;</a></div><p>La commande <code>cut()</code> permet de catégoriser une variable numérique en un certain nombre de classes dont il suffit de définir les bornes d&#39;intervalle à l&#39;aide de l&#39;argument <code>breaks=</code>. Attention, par défaut la borne inférieure du premier intervalle n&#39;est pas incluse et il sera nécessaire de rajouter également l&#39;option <code>include.lowest = TRUE</code>. R transformera automatiquement la variable en variable catégorielle et il est donc possible d&#39;associer des étiquettes textuelles aux intervalles définis <em>via</em> <code>breaks=</code>. </p></td><td class="code"><pre><code class="r">HS$agec &lt;- cut(HS$ageyr, breaks = c(11,12,13,16), 
+               include.lowest = TRUE, 
+               labels = c(&quot;11-12&quot;, &quot;13&quot;, &quot;14-16&quot;))
+</code></pre></td></tr><tr id="row22"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row22">&para;</a></div>
+
+<p>Puisque <code>agec</code> est traité comme une variable catégorielle (type <code>factor</code>), on peut utiliser directement <code>summary()</code> pour afficher la distribution des effectifs selon les 3 classes définies plus haut :</p></td><td class="code"><pre><code class="r">summary(HS$agec)
+</code></pre>
+<pre><code>## 11-12    13 14-16 
+##   109   110    82
+</code></pre></td></tr><tr id="row23"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row23">&para;</a></div>
+
+<p>On utilisera <code>aggregate()</code> pour obtenir les moyennes et les écarts-type de chaque groupe.</p></td><td class="code"><pre><code>aggregate(visual ~ agec, data = HS, mean)
+aggregate(visual ~ agec, data = HS, sd)
+</code></pre></td></tr><tr id="row24"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row24">&para;</a></div>
+
+<p>Le tableau d&#39;analyse de variance s&#39;obtient en couplant les commandes <code>aov()</code> et <code>summary()</code>. Comme dans le cas des autres tests statistiques, on utilise une formule décrivant les variables à mettre en relation :</p></td><td class="code"><pre><code class="r">summary(aov(visual ~ agec, data = HS))
+</code></pre>
+<pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)
+## agec          2    1.2  0.5806   0.424  0.655
+## Residuals   298  407.7  1.3681
+</code></pre></td></tr><tr id="row25"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row25">&para;</a></div>
+
+<h2>Test de corrélation</h2>
+
+</td><td class="code"></td></tr><tr id="row26"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row26">&para;</a></div><p>Le test de nullité d&#39;un coefficient de corrélation s&#39;obtient avec la commande <code>cor.test()</code>. Comme dans le cas de <code>xtabs()</code>, les deux variables apparaissent à droite de la formule puisque dans le cas de l&#39;analyse de corrélation les deux variables sont supposées jouer un rôle symétrique.</p></td><td class="code"><pre><code class="r">cor.test(~ visual + ageyr, data = HS)
+</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  visual and ageyr
+## t = -1.039, df = 299, p-value = 0.2997
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.17186397  0.05343765
+## sample estimates:
+##         cor 
+## -0.05997699
+</code></pre></td></tr><tr id="row27"><td class="docs"><div class="pilwrap"><a class="pilcrow" href="#row27">&para;</a></div>
+</td><td class="code"></td></tr>
+      </table><!--table end-->
+    </div>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="http://yihui.name/knitr/js/docco-resize.js"></script>
+  </body>
+</html>

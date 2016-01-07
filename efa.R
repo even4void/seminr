@@ -5,6 +5,7 @@
 
 source("./load.r")
 
+library(psych)
 
 ## EFA avec psych
 efa <- fa(HS[,c("visual", "cubes", "paper")], nfactors = 1)
@@ -21,7 +22,7 @@ describe(d)
 
 fa.parallel(d, fm = "pa", fa = "fa", main = "")
 
-## modèle avec 6 variables
+## modèle avec 9 variables
 m1 <- fa(d, nfactors = 1, fm ="pa")
 m2 <- fa(d, nfactors = 2, fm ="pa")
 m3 <- fa(d, nfactors = 3, fm ="pa")
